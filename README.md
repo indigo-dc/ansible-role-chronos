@@ -16,6 +16,8 @@ Role Variables
 - `chronos_framework_name` (default: chronos): name that will be used to register the framework on Mesos
 
 SSL specific options:
+- `chronos_password`: password for basic auth
+- `chronos_username`(default: admin): username for basic auth
 - `generate_random_pass` (default: true): if set to true, the password used for creating the self-signed certificate are generated in a random way
 - `chronos_key_password` (to be provided if `generate_random_pass`=false)
 - `chronos_pkcs_password` (to be provided if `generate_random_pass`=false)
