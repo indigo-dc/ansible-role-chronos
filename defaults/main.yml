@@ -14,10 +14,9 @@ zookeeper_peers_nodes: "
 # defaults file for chronos
 openssl_self_signed:
  - { name : "chronos.service.consul" }
-generate_random_pass: "true"
-chronos_key_password: "password"
-chronos_pkcs_password: "password"
-chronos_jks_password: "password"
+chronos_key_password: "qTZhU73KYx5A"
+chronos_pkcs_password: "034sXrLTWkdd"
+chronos_jks_password: "xGpcVzlRxNr4"
 chronos_username: "admin"
 #chronos_password: "secr3t" --> MANDATORY PARAM
 chronos_version: 'latest'
@@ -31,12 +30,5 @@ chronos_image: "indigodatacloud/chronos:{{ chronos_version }}"
 chronos_master_peers: "zk://{{ zookeeper_peers_nodes }}/mesos"
 chronos_zk_peers: "zk://{{ zookeeper_peers_nodes }}"
 
-chronos_ssl_ks_password: "
-   {%- if generate_random_pass|string() == 'true' -%}
-	    {{ chronos_jks_randpassword.stdout  }}
-   {%- else -%}
-            {{ chronos_jks_password }}
-   {%- endif -%}
-"
 
 
