@@ -11,9 +11,14 @@ zookeeper_peers_nodes: "
 	{%- endif -%}
 "
 
-# defaults file for chronos
 openssl_self_signed:
- - { name : "chronos.service.consul" }
+  name : "chronos.service.consul" 
+  country: "" 
+  state: "" 
+  city: ""
+  organization: "" 
+  unit: "" 
+  email: "" 
 chronos_key_password: "qTZhU73KYx5A"
 chronos_pkcs_password: "034sXrLTWkdd"
 chronos_jks_password: "xGpcVzlRxNr4"
