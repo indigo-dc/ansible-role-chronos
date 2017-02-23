@@ -28,6 +28,7 @@
     volumes:
     - "{{ chronos_keystore_path }}:{{ chronos_keystore_path }}"
     env:
+      LIBPROCESS_IP: "{{ chronos_libprocess_ip }}"
       CHRONOS_HOSTNAME: "{{ chronos_hostname }}" 
       CHRONOS_HTTP_PORT: "{{ chronos_port }}"
       CHRONOS_MASTER: "{{ chronos_master_peers }}"
