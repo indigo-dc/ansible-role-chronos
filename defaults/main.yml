@@ -34,6 +34,5 @@ chronos_server_zk_group: chronos_servers
 chronos_image: "indigodatacloud/chronos:{{ chronos_version }}"
 chronos_master_peers: "zk://{{ zookeeper_peers_nodes }}/mesos"
 chronos_zk_peers: "zk://{{ zookeeper_peers_nodes }}"
-
-
+chronos_libprocess_ip: "{{ ansible_default_ipv4.address }}"
 
