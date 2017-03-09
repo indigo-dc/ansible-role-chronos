@@ -24,7 +24,7 @@ chronos_pkcs_password: "034sXrLTWkdd"
 chronos_jks_password: "xGpcVzlRxNr4"
 chronos_username: "admin"
 #chronos_password: "secr3t" --> MANDATORY PARAM
-chronos_version: '2.5.0-SNAPSHOT'
+chronos_version: 'indigo_1'
 chronos_hostname: "{{ ansible_default_ipv4.address }}"
 chronos_framework_name: "chronos"
 chronos_port: '4400'
