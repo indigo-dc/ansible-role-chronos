@@ -1,3 +1,7 @@
+---
+- name: Set facts
+  include: facts.yml
+
 - name: Install openjdk
   apt: name="openjdk-7-jre-headless" state=present
 
@@ -17,26 +21,21 @@
   when: chronos_key.stat.exists == False
   tags: chronos
 
+
+- name: "Create marathon container env file"
+  template:
+    src={{chronosenv_template}} dest=/etc/marathon/.chronosenv
+
+
 - name: run chronos container
-  docker:
+  docker_container:
     name: chronos
     image: "{{ chronos_image }}"
-    state: reloaded
+    state: started
     detach: true
     restart_policy: always
-    net: host
+    network_mode: host
     volumes:
     - "{{ chronos_keystore_path }}:{{ chronos_keystore_path }}"
-    env:
-      LIBPROCESS_IP: "{{ chronos_libprocess_ip }}"
-      CHRONOS_HOSTNAME: "{{ chronos_hostname }}" 
-      CHRONOS_HTTP_PORT: "{{ chronos_port }}"
-      CHRONOS_MASTER: "{{ chronos_master_peers }}"
-      CHRONOS_ZK_HOSTS: "{{ chronos_zk_peers }}"
-      CHRONOS_ZK_PATH: "/{{ chronos_framework_name }}/state" 
-      CHRONOS_MESOS_FRAMEWORK_NAME: "{{ chronos_framework_name }}"
-      CHRONOS_HTTPS_PORT: "{{ chronos_https_port }}"
-      CHRONOS_SSL_KEYSTORE_PASSWORD: "{{ chronos_jks_password }}"
-      CHRONOS_SSL_KEYSTORE_PATH: "{{ chronos_keystore_path }}"
-      CHRONOS_HTTP_CREDENTIALS: "{{chronos_username}}:{{chronos_password}}"
+    env_file: /etc/chronos/.chronosenv
   tags: chronos 
