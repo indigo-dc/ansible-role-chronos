@@ -22,9 +22,9 @@
   tags: chronos
 
 
-- name: "Create marathon container env file"
+- name: "Create chronos container env file"
   template:
-    src={{chronosenv_template}} dest=/etc/marathon/.chronosenv
+    src={{chronosenv_template}} dest=/etc/chronos/.chronosenv
 
 
 - name: run chronos container
