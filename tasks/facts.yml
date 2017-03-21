@@ -1,0 +1,11 @@
+---
+- set_fact: chronosenv_template=chronos-env.j2
+
+- set_fact: chronosenv_template=chronos-ssl-env.j2
+  when: chronos_enable_ssl == True
+
+- set_fact: chronos_protocol=http
+
+- set_fact: chronos_protocol=https
+  when: chronos_enable_ssl == True
+
