@@ -19,15 +19,17 @@ openssl_self_signed:
   organization: "" 
   unit: "" 
   email: "" 
+chronos_enable_ssl: True
 chronos_key_password: "qTZhU73KYx5A"
 chronos_pkcs_password: "034sXrLTWkdd"
 chronos_jks_password: "xGpcVzlRxNr4"
 chronos_username: "admin"
 #chronos_password: "secr3t" --> MANDATORY PARAM
-chronos_version: '2.5.0-SNAPSHOT'
+#chronos_version: '2.5.0-SNAPSHOT'
+chronos_version: 3.0.2
 chronos_hostname: "{{ ansible_default_ipv4.address }}"
 chronos_framework_name: "chronos"
-chronos_port: '4400'
+chronos_http_port: '4400'
 chronos_https_port: '4443'
 chronos_keystore_path: '/etc/chronos/ssl_keystore.jks'
 chronos_server_zk_group: chronos_servers
