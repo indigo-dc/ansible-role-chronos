@@ -18,7 +18,7 @@
   file: path="{{ chronos_keystore_path | dirname }}" state=directory
 
 - name: generate keystore
-  command: keytool -importkeystore -srckeystore chronos.pkcs12 -srcalias chronos -srcstorepass $CHRONOS_PKCS_PASSWORD -srcstoretype PKCS12 -destkeystore "{{ chronos_keystore_path}}" -deststorepass $CHRONOS_JKS_PASSWORD
+  command: keytool -importkeystore -noprompt -srckeystore chronos.pkcs12 -srcalias chronos -srcstorepass $CHRONOS_PKCS_PASSWORD -srcstoretype PKCS12 -destkeystore "{{ chronos_keystore_path}}" -deststorepass $CHRONOS_JKS_PASSWORD
   environment: 
     CHRONOS_PKCS_PASSWORD: "{{ pkcs_password }}"
     CHRONOS_JKS_PASSWORD: "{{ jks_password }}"
