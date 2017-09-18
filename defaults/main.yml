@@ -37,4 +37,7 @@ chronos_image: "indigodatacloud/chronos:{{ chronos_version }}"
 chronos_master_peers: "zk://{{ zookeeper_peers_nodes }}/mesos"
 chronos_zk_peers: "zk://{{ zookeeper_peers_nodes }}"
 chronos_libprocess_ip: "{{ ansible_default_ipv4.address }}"
+# Set disable_after_failures = 1 to avoid jobs flood in case of failures
+chronos_disable_after_failures: 1
+
 
