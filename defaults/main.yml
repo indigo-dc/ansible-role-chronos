@@ -20,13 +20,14 @@ openssl_self_signed:
   unit: "" 
   email: "" 
 chronos_enable_ssl: True
+chronos_enable_gpu_support: false
 chronos_key_password: "qTZhU73KYx5A"
 chronos_pkcs_password: "034sXrLTWkdd"
 chronos_jks_password: "xGpcVzlRxNr4"
 chronos_username: "admin"
 #chronos_password: "secr3t" --> MANDATORY PARAM
 #chronos_version: '2.5.0-SNAPSHOT'
-chronos_version: 3.0.2
+chronos_version: 3.0.2_gpu
 chronos_hostname: "{{ ansible_default_ipv4.address }}"
 chronos_framework_name: "chronos"
 chronos_http_port: '4400'
