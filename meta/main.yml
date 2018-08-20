@@ -16,4 +16,5 @@ galaxy_info:
    - chronos
 
 dependencies: 
-   - { role: indigo-dc.docker, tags: ['v0.0.2-dodas'] }
+  - src: indigo-dc.docker
+    version: v0.0.2-dodas
