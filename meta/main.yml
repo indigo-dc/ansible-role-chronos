@@ -17,4 +17,4 @@ galaxy_info:
 
 dependencies: 
   - src: indigo-dc.docker
-    version: v0.0.2-dodas
+    version: v1.0.0-dodas
