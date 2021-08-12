@@ -1,15 +1,55 @@
-- name: create ssl signed key
-  command: openssl genrsa -des3 -out chronos.key -passout "env:CHRONOS_KEY_PASSWORD"
-  environment:
-    CHRONOS_KEY_PASSWORD: "{{ key_password }}"
+---
 
-- name: sign cert
-  command: openssl req -new -x509 -key chronos.key -passin "env:CHRONOS_KEY_PASSWORD" -subj "/C={{ openssl_self_signed.country }}/ST={{ openssl_self_signed.state }}/L={{ openssl_self_signed.city }}/O={{ openssl_self_signed.organization }}/OU={{ openssl_self_signed.unit }}/CN={{ openssl_self_signed.name }}/emailAddress={{ openssl_self_signed.email }}/" -out self-signed-chronos.pem -days 3650
-  environment:
-    CHRONOS_KEY_PASSWORD: "{{ key_password }}"
+
+- name: Generate a Self Signed certificate
+  block:
+    - name: Copy root CA key and crt
+      copy: src={{item}} dest=/tmp/{{item}}
+      with_items:
+        - rootCA.crt
+        - rootCA.key
+    - openssl_privatekey:
+        path: "{{ chronos_ssl_key_file }}"
+        passphrase: "{{ key_password }}"
+        cipher: auto
+
+    - openssl_csr:
+        path: "{{ chronos_ssl_csr_file }}"
+        privatekey_path: "{{ chronos_ssl_key_file }}"
+        privatekey_passphrase: "{{ key_password }}"
+        common_name: "{{ openssl_self_signed.name }}"
+        country_name: "{{ openssl_self_signed.country }}"
+        organization_name: "{{ openssl_self_signed.organization }}"
+        organizational_unit_name: "{{ openssl_self_signed.unit }}" 
+        state_or_province_name: "{{ openssl_self_signed.state }}"
+        email_address: "{{ openssl_self_signed.email }}"
+
+    - openssl_certificate:
+        provider: ownca
+        path: "{{ chronos_ssl_cert_file }}"
+        privatekey_path: "{{ chronos_ssl_key_file }}"
+        privatekey_passphrase: "{{ key_password }}"
+        csr_path: "{{ chronos_ssl_csr_file }}"
+        ownca_path: /tmp/rootCA.crt
+        ownca_privatekey_path: /tmp/rootCA.key
+  when: chronos_ssl_cert_gen == "self_signed"
+
+
+- include_role:
+    name: geerlingguy.certbot
+  vars:  
+    certbot_auto_renew: true
+    certbot_create_if_missing: true
+    certbot_create_method: standalone
+    certbot_admin_email: "{{ chronos_certbot_admin_email }}"
+    certbot_certs:
+      - domains:
+          - "{{ chronos_dns_name }}"  
+  when: chronos_ssl_cert_gen == "letsencrypt"     
+
 
 - name: extract pcks12
-  command: openssl pkcs12 -inkey chronos.key -passin "env:CHRONOS_KEY_PASSWORD" -name chronos -in self-signed-chronos.pem -password "env:CHRONOS_PKCS_PASSWORD" -export -out chronos.pkcs12
+  command: openssl pkcs12 -inkey "{{chronos_ssl_key_file}}" -passin "env:CHRONOS_KEY_PASSWORD" -name chronos -in "{{ chronos_ssl_cert_file }}" -password "env:CHRONOS_PKCS_PASSWORD" -export -out /etc/chronos/chronos.pkcs12
   environment:
     CHRONOS_KEY_PASSWORD: "{{ key_password }}"
     CHRONOS_PKCS_PASSWORD: "{{ pkcs_password }}"
@@ -18,7 +58,7 @@
   file: path="{{ chronos_keystore_path | dirname }}" state=directory
 
 - name: generate keystore
-  command: keytool -importkeystore -noprompt -srckeystore chronos.pkcs12 -srcalias chronos -srcstorepass $CHRONOS_PKCS_PASSWORD -srcstoretype PKCS12 -destkeystore "{{ chronos_keystore_path}}" -deststorepass $CHRONOS_JKS_PASSWORD
+  command: keytool -importkeystore -noprompt -srckeystore /etc/chronos/chronos.pkcs12 -srcalias chronos -srcstorepass $CHRONOS_PKCS_PASSWORD -srcstoretype PKCS12 -destkeystore "{{ chronos_keystore_path}}" -deststorepass $CHRONOS_JKS_PASSWORD
   environment: 
     CHRONOS_PKCS_PASSWORD: "{{ pkcs_password }}"
     CHRONOS_JKS_PASSWORD: "{{ jks_password }}"

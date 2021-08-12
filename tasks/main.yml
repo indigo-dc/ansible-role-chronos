@@ -12,9 +12,6 @@
   package: name="{{openjdk_package}}" state=present
 
 
-- name: Check that the certificates exists
-  stat: path=chronos.key
-  register: chronos_key
 - block:
 
     - name: generate keystore
@@ -24,7 +21,7 @@
         jks_password: "{{chronos_jks_password}}"
       include: enable_ssl.yml
 
-  when: chronos_key.stat.exists == False
+  when: chronos_enable_ssl|bool
   tags: chronos
 
 
