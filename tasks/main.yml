@@ -11,6 +11,9 @@
 - name: Install openjdk
   package: name="{{openjdk_package}}" state=present
 
+- name: create etc directory
+  file: state=directory path=/etc/chronos
+
 
 - block:
 
@@ -22,7 +25,6 @@
       include: enable_ssl.yml
 
   when: chronos_enable_ssl|bool
-  tags: chronos
 
 
 - name: "Create chronos container env file"
@@ -41,4 +43,3 @@
     volumes:
     - "{{ chronos_keystore_path }}:{{ chronos_keystore_path }}"
     env_file: /etc/chronos/.chronosenv
-  tags: chronos 
