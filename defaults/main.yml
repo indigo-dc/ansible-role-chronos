@@ -25,7 +25,8 @@ chronos_ssl_key_file: "{% if chronos_ssl_cert_gen == 'letsencrypt' %}/etc/letsen
 chronos_ssl_csr_file: /etc/chronos/server.csr
 #chronos_ssl_cert_gen - allowed-values = self_signed, letsencrypt, none
 chronos_ssl_cert_gen: self_signed
-chronos_dns_name:
+#chronos_dns_name is used only for letsencrypt cert generation
+chronos_dns_name: "{{chronos_hostname}}"
 chronos_certbot_admin_email:
 chronos_enable_gpu_support: false
 chronos_key_password: "qTZhU73KYx5A"
